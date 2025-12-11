@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Project.Worker-541d1c2c-7e8c-4d70-8293-71201be1f7b7</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Project.Application\Project.Application.csproj" />
+    <ProjectReference Include="..\Project.Domain\Project.Domain.csproj" />
+    <ProjectReference Include="..\Project.Infrastructure\Project.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
