@@ -90,3 +90,21 @@ You must run:
 * WebAPI
 * Worker
   **simultaneously**
+
+---
+
+## **7. Running Unit Test**
+
+```bash
+cd Project.Test
+dotnet test
+```
+
+---
+
+## **8. Running Unit Test Integration**
+
+```bash
+cd Project.Test.Integration
+dotnet test
+```
