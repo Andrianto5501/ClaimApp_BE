@@ -9,60 +9,68 @@ using Project.Domain.Interfaces.Services;
 using Project.Infrastructure.Persistence;
 using Project.Infrastructure.Repositories;
 
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<AppDbContext>(opt =>
+namespace Project.WebApi
 {
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-// Cors
-var corsOriginAll = "_corsOriginAll";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: corsOriginAll,
-        policy =>
+    public class Program
+    {
+        public static void Main(string[] args)
         {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
-});
+            var builder = WebApplication.CreateBuilder(args);
 
-// Repositories
-builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
+            // Add services to the container.
 
-// Services
-builder.Services.AddScoped<IClaimService, ClaimService>();
+            builder.Services.AddControllers();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
-// Validators
-builder.Services.AddScoped<IValidator<AddClaimRequestDto>, ClaimAddValidator>();
-builder.Services.AddScoped<IValidator<ClaimModifyStatusRequestDto>, ClaimModifyStatusValidator>();
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+            {
+                opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
-// FluentValidation auto pipeline
-builder.Services.AddFluentValidationAutoValidation();
+            // Cors
+            var corsOriginAll = "_corsOriginAll";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: corsOriginAll,
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
 
-var app = builder.Build();
+            // Repositories
+            builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            // Services
+            builder.Services.AddScoped<IClaimService, ClaimService>();
+
+            // Validators
+            builder.Services.AddScoped<IValidator<AddClaimRequestDto>, ClaimAddValidator>();
+            builder.Services.AddScoped<IValidator<ClaimModifyStatusRequestDto>, ClaimModifyStatusValidator>();
+
+            // FluentValidation auto pipeline
+            builder.Services.AddFluentValidationAutoValidation();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseCors(corsOriginAll);
+            app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseAuthorization();
+            app.MapControllers();
+            app.Run();
+        }
+    }
 }
-
-app.UseCors(corsOriginAll);
-app.UseRouting();
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
-app.Run();
